@@ -1,1 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
 
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MAUDAM SAS - Crédito Prendario</title>
+        <link rel="icon" type="image/png" href="Logo-Maudam.jpg">
+
+
+        <style>
+            /* ====== ESTILOS GENERALES ====== */
+            body{
+                margin:0;
+                font-family:'Segoe UI',sans-serif;
+                background:url(IMAGEN.jpg) center/cover;
+                color:#fff;
+                padding:20px 10px;
+            }
+            .container{
+                max-width:1100px;
+                margin:auto;
+                background:#fff;
+                color:#1e293b;
+                border-radius:24px;
+                overflow:hidden;
+                box-shadow:0 30px 100px rgba(0,0,0,.4);
+            }
+
+            header{
+                background:linear-gradient(135deg,#256548,#37ab77);
+                padding:40px 20px;
+                text-align:center;
+                color:#fff;
+            }
+            h1{margin:5px 0;font-size:2.6rem}
+            .subtitle{font-size:1.2rem}
+
+            /* ====== LOGO ====== */
+            .logo{
+                height:300px;
+                margin-bottom:15px;
+                text-align: right;
+            }
+
+            /* ====== SIMULADOR VEHÍCULO ====== */
+            .calc-container{
+                margin-top:30px;
+            }
+            .inputs{
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:20px;
+                margin-top:20px;
+            }
+            input,select{
+                width:80%;
+                padding:14px;
+                font-size:1.2rem;
+                border-radius:30px;
+                border:2px solid #ccc;
+                text-align: center; 
+            }
+            .resultado{
+                margin-top:25px;
+            }
+            #montoMaximo{
+                font-size:2rem;
+                color:#dc2626;
+                font-weight:bold;
+            }
+            .porcentajes-simple{
+                background:#2e2e2e;
+                color:#ffffff;
+                padding:14px 20px;
+                border-radius:15px;
+                margin-top:30px;
+                max-width:1050px;
+                text-align: left;
+            }
+            .porcentajes-titulo{
+                font-size:0.95rem;
+                font-weight:60;
+                font-family: Arial, Helvetica, sans-serif;
+                margin-bottom:6px;
+                padding:0px 15px;
+            }
+            .porcentajes-linea{
+                font-size: 15px;
+                font-weight:500;
+                padding:5px 0px;
+            }
+            .porcentajes-años{
+                padding: 0px 15px;
+                display: inline-block;
+            }
+
+            /* ====== CALCULADORA ====== */
+            .calc-section{
+                padding:40px 20px;
+                text-align:center;
+            }
+            .input-monto{
+                width:80%;
+                max-width:400px;
+                padding:16px;
+                font-size:1.5rem;
+                text-align:center;
+                border-radius:14px;
+                border:3px solid #e2e8f0;
+            }
+            .cards-grid{
+                display:grid;
+                grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+                gap:20px;
+                margin-top:30px;
+            }
+            .card{
+                background:#1e293b;
+                color:#fff;
+                padding:25px;
+                border-radius:16px;
+                box-shadow:0 10px 25px rgba(0,0,0,.3);
+            }
+            .card h3{margin-bottom:10px;color:#cbd5e1}
+            .valor{font-size:2rem;font-weight:bold;color:#fbbf24}
+            .neto{color:#86efac}
+
+            /* ====== CUOTAS ====== */
+            .card-cuota{
+                background:#f8fafc;
+                color:#0f172a;
+                border:3px solid #e2e8f0;
+            }
+            .meses{font-size:1.5rem;font-weight:bold;color:#72a091}
+            .cuota{
+                font-size:2.2rem;
+                font-weight:900;
+                color:#72a091;
+                word-break: break-word;
+                overflow-wrap: anywhere;
+                max-width:100%;
+            }
+            .total{font-weight:bold}
+            .coef{
+                margin-top:10px;
+                font-size:0.95rem;
+                font-weight:bold;
+                background:#0f172a;
+                color:#e5e7eb;
+                padding:6px 14px;
+                border-radius:20px;
+                display:inline-block;
+            }
+            .cuotas-grid{
+                display:grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap:20px;
+                margin-top:30px;
+            }
+            .info-ofertas{
+                margin-top:50px;
+                font-size:1.1rem;
+                color:#475569;
+                background:#e7f4ec;
+                padding:14px 20px;
+                border-radius:14px;
+                display:inline-block;
+            }
+
+            /* ====== UVA ====== */
+            .uva-cards-grid{
+                display:grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap:20px;
+                margin-top:20px;
+            }
+            .uva-card{
+                transition: transform .2s, box-shadow .2s;
+            }
+            .uva-card:hover{
+                transform: translateY(-4px);
+                box-shadow:0 15px 30px rgba(0,0,0,.15);
+            }
+            .uva-card.inactiva{
+                opacity:.45;
+                filter: grayscale(1);
+            }
+            .uva-msg{
+                display:none;
+                margin-top:18px;
+                background:#fde68a;
+                color:#92400e;
+                padding:14px;
+                border-radius:14px;
+                font-weight:bold;
+            }
+
+            /* ====== SELECTOR TIPO DE PRÉSTAMO ====== */
+            .selector-prestamo {
+                margin-top: 40px;
+                text-align: center;
+            }
+            .selector-header {
+                margin-bottom: 22px;
+            }
+            .selector-titulo {
+                font-size: 1.5rem;
+                font-weight: 800;
+                color: #0f172a;
+                margin-bottom: 6px;
+            }
+            .selector-subtitulo {
+                font-size: 0.95rem;
+                color: #64748b;
+            }
+            .selector-opciones {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 20px;
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            .opcion-prestamo {
+                cursor: pointer;
+            }
+            .opcion-prestamo input {
+                display: none;
+            }
+            .opcion-contenido {
+                border: 2px solid #e2e8f0;
+                border-radius: 16px;
+                padding: 20px;
+                background: #f8fafc;
+                transition: all 0.25s ease;
+                text-align: left;
+            }
+            .opcion-titulo {
+                font-size: 1.15rem;
+                font-weight: 700;
+                color: #0f172a;
+                display: block;
+            }
+            .opcion-desc {
+                font-size: 0.95rem;
+                color: #64748b;
+                margin-top: 4px;
+                display: block;
+            }
+            .opcion-prestamo input:checked + .opcion-contenido {
+                border-color: #22c55e;
+                background: #ecfdf5;
+                box-shadow: 0 10px 25px rgba(34,197,94,0.25);
+            }
+            .opcion-prestamo:hover .opcion-contenido {
+                transform: translateY(-3px);
+                box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            }
+
+            /* ====== WHATSAPP ====== */
+            .whatsapp-btn{
+                margin:40px auto;
+                padding:18px 35px;
+                background:#25d366;
+                color:#fff;
+                font-size:1.4rem;
+                font-weight: bold;
+                border:none;
+                border-radius:50px;
+                cursor:pointer;
+                display:flex;
+                align-items:center;
+                justify-content: center;
+                gap:15px;
+                max-width: 400px;
+                box-shadow:0 10px 30px rgba(37,211,102,.4);
+                transition: all 0.3s;
+            }
+            .whatsapp-btn:hover {
+                background: #128c7e;
+                transform: translateY(-5px);
+                box-shadow: 0 20px 40px rgba(37,211,102,0.5);
+            }
+            .whatsapp-btn img{height:36px}
+
+            /* ====== CONTACTOS ====== */
+            .contactos-grid{
+                display:grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+                gap:20px;
+                margin-top:20px;
+            }
+            .contacto-card{
+                background:#f8fafc;
+                border:2px solid #e2e8f0;
+                border-radius:16px;
+                padding:20px;
+                text-align:center;
+                transition:.2s;
+            }
+            .contacto-card:hover{
+                transform: translateY(-4px);
+                box-shadow:0 10px 25px rgba(0,0,0,.15);
+            }
+            .contacto-card h4{
+                margin-bottom:10px;
+                color:#0f172a;
+            }
+            .contacto-card a{
+                display:inline-block;
+                margin-top:6px;
+                font-size:1.2rem;
+                font-weight:bold;
+                color:#22c55e;
+                text-decoration:none;
+            }
+
+            /* ====== FOOTER ====== */
+            footer{
+                background:#0f172a;
+                color:#cbd5e1;
+                text-align:center;
+                padding:30px;
+            }
+
+            /* ====== MOBILE ====== */
+            @media(max-width:768px){
+                .inputs{grid-template-columns:1fr}
+                .cuotas-grid{grid-template-columns: 1fr;}
+                .logo{
+                    height:200px;
+                    margin-bottom:15px;
+                    text-align: right;
+                }
+                .uva-cards-grid{grid-template-columns: repeat(1, 1fr);}
+                .mensaje-consulta{
+                    font-size: 30px;
+                }
+                .porcentajes-años{
+                    display: block;
+                    padding: 4px 15px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <header>
+                <img src="IMAGEN.png" alt="MAUDAM SAS" class="logo">
+                <p class="subtitle">Simulá tu préstamo en segundos</p>
+
+                <div class="calc-container">
+                    <h2>¿Cuánto te prestamos por tu auto?</h2>
+
+                    <div class="inputs">
+                        <div>
+                            <label>Valor INFO del vehículo ($)</label>
+                            <input type="number" id="valorVehiculo" value="15000000">
+                        </div>
+                        <div>
+                            <label>Año del vehículo</label>
+                            <select id="anioVehiculo">
+                                <option value="2025">2025 - 2026</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                                <option value="2019">2019</option>
+                                <option value="2018">2018</option>
+                                <option value="2017">2017</option>
+                                <option value="2016">2016</option>
+                                <option value="2015">2015</option>
+                                <option value="2014">2014</option>
+                                <option value="2013">2013</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="resultado">
+                        <p>Monto máximo:</p>
+                        <div id="montoMaximo">$0</div>
+                        <div id="textoPorcentaje"></div>
+                    </div>
+
+                    <div class="porcentajes-simple">
+                        <div class="porcentajes-titulo">
+                            PORCENTAJE DE FINANCIACIÓN SEGÚN ANTIGUEDAD DEL VEHÍCULO:
+                        </div>
+                        <div class="porcentajes-linea"> 
+                            <label class="porcentajes-años">2025-2026: 80% de su valor</label>
+                            <label class="porcentajes-años">2021-2024: 70% de su valor</label>
+                            <label class="porcentajes-años">2016-2020: 60% de su valor</label>
+                            <label class="porcentajes-años">2013-2015: 50% de su valor</label>
+                        </div>
+                    </div>
+
+                </div>
+            </header>
+
+            <section class="calc-section">
+                <h2>Calculadora de Crédito</h2>
+
+                <input type="number" id="montoFinanciar" class="input-monto" value="8000000">
+
+                <h2 class="prestamo-tradicional" id="prestamoTradicional">Préstamo Tradicional</h2>
+
+                <!-- <div style="margin-bottom:20px">
+                    <label>Seleccione la Provincia</label><br>
+                    <select id="provincia" style="width:260px">
+                        <option value="cordoba">Córdoba</option>
+                        <option value="santiago">Santiago del Estero</option>
+                    </select>
+                </div>
+                <p style="font-size:.95rem;color:#64748b;margin-top:6px">
+                    * Los gastos administrativos varían según la provincia
+                </p> -->
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Monto solicitado</h3>
+                        <p class="valor" id="mostrarMonto">$0</p>
+                    </div>
+                    <div class="card">
+                        <h3>Gastos de Otorgamiento</h3>
+                        <p class="valor">$500.000</p>
+                    </div>
+                    <div class="card">
+                        <h3>Neto a percibir (AGENCIA)</h3>
+                        <p class="valor neto" id="mostrarNeto">$0</p>
+                    </div>
+                </div>
+
+                <div class="cuotas-grid" id="cuotas"></div>
+
+                <p class="info-ofertas">
+                    Además del crédito prendario por vehículo, <strong>contamos con 5 ofertas más de financiación</strong> adaptadas a distintas necesidades.
+                </p>
+
+                <h2 class="prestamo-UVA" id="prestamoUVA">Préstamo Línea UVA</h2>
+
+                <div class="uva-box">
+
+                    <div class="uva-cards-grid" id="uvaCards">
+                        <div class="card card-cuota uva-card" data-plazo="24">
+                            <div class="meses">24 meses</div>
+                            <div class="cuota" id="uva24">—</div>
+                            <div class="coef">Coeficiente: $65,35</div>
+                        </div>
+
+                        <div class="card card-cuota uva-card" data-plazo="36">
+                            <div class="meses">36 meses</div>
+                            <div class="cuota" id="uva36">—</div>
+                            <div class="coef">Coeficiente: $52,10</div>
+                        </div>
+
+                        <div class="card card-cuota uva-card" data-plazo="48">
+                            <div class="meses">48 meses</div>
+                            <div class="cuota" id="uva48">—</div>
+                            <div class="coef">Coeficiente: $45,88</div>
+                        </div>
+
+                        <div class="card card-cuota uva-card" data-plazo="60">
+                            <div class="meses">60 meses</div>
+                            <div class="cuota" id="uva60">—</div>
+                            <div class="coef">Coeficiente: $42,43</div>
+                        </div>
+                    </div>
+
+                    <div id="uvaMensaje" class="uva-msg">
+                        Consulta a nuestro WhatsApp otras opciones para línea UVA
+                    </div>
+                </div>
+
+                <div id="selectorPrestamo" class="selector-prestamo">
+                     <div class="selector-header">
+                        <h3 class="selector-titulo">Elegí el tipo de crédito</h3>
+                        <p class="selector-subtitulo">
+                            Seleccioná la modalidad que mejor se adapte a tus necesidades financieras
+                        </p>
+                    </div>
+
+                    <div class="selector-opciones">
+                        <label class="opcion-prestamo">
+                            <input type="radio" name="tipoPrestamo" value="Tradicional" checked>
+                            <div class="opcion-contenido">
+                                <span class="opcion-titulo">Préstamo Tradicional</span>
+                                <span class="opcion-desc">Cuotas fijas en pesos</span>
+                            </div>
+                        </label>
+
+                        <label class="opcion-prestamo">
+                            <input type="radio" name="tipoPrestamo" value="UVA">
+                            <div class="opcion-contenido">
+                                <span class="opcion-titulo">Préstamo Línea UVA</span>
+                                <span class="opcion-desc">Cuotas ajustadas por inflación</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+
+                <button class="whatsapp-btn" id="btnWhatsApp">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+                    Enviar por WhatsApp
+                </button>
+
+                <h1 class="mensaje-consulta">Consultar adjuntando fotos del DNI y título del vehículo</h1>
+
+                <h2>Consultas y Asesores</h2>
+
+                <div class="contactos-grid">
+                    <div class="contacto-card">
+                        <h4>Diego Comba</h4>
+                        <a href="#" onclick="enviarWhatsApp('5493516161792')" target="_blank">
+                            📱 351-6161792
+                        </a>
+                    </div>
+                </div>
+
+            </section>
+
+            <footer>
+                MAUDAM SAS • Créditos prendarios • Sujeto a aprobación • Contamos con 5 ofertas adicionales • Consulta por Línea UVA
+            </footer>
+        </div>
+
+        <script>
+            /* ====== CONSTANTES ====== */
+            const GASTOS_FIJOS = 700000;
+            const COEF = {12:126.87, 24:82.21, 36:70.11, 48:64.95, 60:62.42};
+            const TEL = "5493516161792";
+            const COEF_UVA = {24: 65.35, 36: 52.10, 48: 45.88, 60: 42.43};
+
+
+            /* ====== ELEMENTOS ====== */
+            const valorVehiculo = document.getElementById("valorVehiculo");
+            const anioVehiculo = document.getElementById("anioVehiculo");
+            const montoMaximo = document.getElementById("montoMaximo");
+            const textoPorcentaje = document.getElementById("textoPorcentaje");
+
+            const montoFinanciar = document.getElementById("montoFinanciar");
+            const mostrarMonto = document.getElementById("mostrarMonto");
+            const mostrarNeto = document.getElementById("mostrarNeto");
+            const cuotasDiv = document.getElementById("cuotas");
+            const btnWhatsApp = document.getElementById("btnWhatsApp");
+
+            /* ====== FUNCIONES ====== */
+            function calcularPrestamo(){
+                const valor = +valorVehiculo.value || 0;
+                const anio = +anioVehiculo.value;
+                let porc = 0, txt="";
+
+                if(anio>=2025){porc=80;txt="80% (0 a 1 año)";}
+                else if(anio>=2021){porc=70;txt="70% (2 a 5 años)";}
+                else if(anio>=2016){porc=60;txt="60% (6 a 10 años)";}
+                else if(anio>=2013){porc=50;txt="50% (11 a 13 años)";}
+                else{txt="No financiable";}            
+
+                const max = Math.floor(valor*porc/100/1000)*1000;
+                montoMaximo.textContent = "$"+max.toLocaleString("es-AR");
+                textoPorcentaje.textContent = txt;
+
+                // setear automáticamente el input
+                montoFinanciar.value = max;
+                calcularTodo();
+                actualizarUVA(anio);
+            }
+
+            function calcularTodo(){
+                const monto = +montoFinanciar.value || 0;
+                const gastos = GASTOS_FIJOS;
+                const neto = monto - gastos;
+                const anio = +anioVehiculo.value;
+                
+                mostrarMonto.textContent = "$" + monto.toLocaleString("es-AR");
+                mostrarNeto.textContent = neto>0 ? "$"+neto.toLocaleString("es-AR") : "Monto insuficiente";
+
+                document.querySelector(".card:nth-child(2) .valor").textContent ="$" + gastos.toLocaleString("es-AR");
+
+                cuotasDiv.innerHTML="";
+                window.textoWA = 
+                `*Simulación Crédito Prendario*%0A%0A` +
+                `Monto solicitado: $${monto.toLocaleString("es-AR")}%0A` +
+                `Gastos de Otorgamiento: $${gastos.toLocaleString("es-AR")}%0A` +
+                `Neto a percibir (Agencia): $${neto.toLocaleString("es-AR")}%0A%0A` +
+                `*Cuotas tradicionales:*%0A`;
+
+                for(let m in COEF){
+                    const cuota = Math.round(monto*COEF[m]/1000);
+                    const total = cuota*m;
+
+                    cuotasDiv.innerHTML += `
+                    <div class="card card-cuota">
+                        <div class="meses">${m} meses</div>
+                        <div class="cuota">$${cuota.toLocaleString("es-AR")}</div>
+                        <div class="total">Total: $${total.toLocaleString("es-AR")}</div>
+                        <div class="coef">Coeficiente: ${COEF[m]}</div>
+                    </div>
+                    `;
+                    textoWA += `${m} meses → $${cuota.toLocaleString("es-AR")} | Total: $${total.toLocaleString("es-AR")}%0A`;
+
+                }
+                if (anio >= 2021) {
+                    textoWA += `%0A*Cuotas UVA (estimadas):*%0A`;
+                    for(let plazo in COEF_UVA){
+                        const cuotaUVA = Math.round((monto / 1000) * COEF_UVA[plazo]);
+                        textoWA += `${plazo} meses → $${cuotaUVA.toLocaleString("es-AR")}%0A`;
+                    }
+                }
+
+                textoWA += `%0AQuiero más información sobre este crédito.`;
+
+                btnWhatsApp.addEventListener("click", () => enviarWhatsApp(TEL));
+
+                calcularUVA();
+            }
+
+            function calcularUVA(){
+                const monto = +montoFinanciar.value || 0;
+
+                if(monto <= 0) return;
+
+                for(let plazo in COEF_UVA){
+                    const cuota = Math.round((monto / 1000) * COEF_UVA[plazo]);
+                    document.getElementById("uva" + plazo).textContent =
+                        "$" + cuota.toLocaleString("es-AR");
+                }
+            }
+
+            function actualizarUVA(anio){
+                const msg = document.getElementById("uvaMensaje");
+                const cards = document.querySelectorAll(".uva-card");
+                const selector = document.getElementById("selectorPrestamo");
+
+                if(anio >= 2021){
+                    // UVA ACTIVO
+                    cards.forEach(card => card.classList.remove("inactiva"));
+                    msg.style.display = "none";
+                    selector.style.display = "block";
+
+                    calcularUVA();
+                }else{
+                    // UVA NO DISPONIBLE
+                    cards.forEach(card => card.classList.add("inactiva"));
+                    msg.style.display = "block";
+                    selector.style.display = "none";
+
+                    // 👉 Mostrar $0 en todas las cuotas UVA
+                    for (let plazo in COEF_UVA) {
+                        const el = document.getElementById("uva" + plazo);
+                        if (el) el.textContent = "$0";
+                    }
+                }
+            }
+
+            function enviarWhatsApp(numero) {
+                if (!window.textoWA) return;
+
+                const tipoPrestamo =
+                    document.querySelector('input[name="tipoPrestamo"]:checked')?.value
+                    || "Tradicional";
+
+                const textoFinal =
+                    window.textoWA.replace(
+                        /(\*Cuotas tradicionales:\*)/,
+                        `*Tipo de préstamo elegido:* ${tipoPrestamo}%0A%0A$1`
+                    );
+
+                window.open(`https://wa.me/${numero}?text=${textoFinal}`);
+            }
+
+            function soloNumeros(input, max = 10) {
+                input.value = input.value.replace(/\D/g, "").slice(0, max);
+            }
+
+
+            /* ====== EVENTOS ====== */
+            valorVehiculo.addEventListener("input", () => {
+                soloNumeros(valorVehiculo);
+                calcularPrestamo();
+            });
+            anioVehiculo.addEventListener("change",calcularPrestamo);
+            montoFinanciar.addEventListener("input", () => {
+                soloNumeros(montoFinanciar);
+                calcularTodo();
+            });
+
+            window.addEventListener("load",()=>{
+                calcularPrestamo();
+                calcularTodo();
+            });
+        </script>
+
+    </body>
+</html>
