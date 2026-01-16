@@ -61,14 +61,51 @@
                 border:2px solid #ccc;
                 text-align: center; 
             }
-            .resultado{
-                margin-top:25px;
+            
+            .resultado-box{
+                display:grid;
+                grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+                gap:20px;
+                margin-top:30px;
             }
-            #montoMaximo{
+            .monto-card{
+                background:#f8fafc;
+                border:2px solid #e2e8f0;
+                border-radius:16px;
+                padding:20px;
+                text-align:center;
+            }
+            .titulo-monto{
+                font-size:18px;
+                font-weight:700;
+                color:#475569;
+            }
+            .monto{
                 font-size:2rem;
-                color:#dc2626;
-                font-weight:bold;
+                font-weight:900;
+                margin:10px 0;
             }
+            .detalle{
+                font-size:16px;
+                color:#64748b;
+                font-weight: bold;
+            }
+
+            /* ====== FIX COLORES MONTOS ====== */
+            .monto-card, .monto-card * {color:#0f172a;}
+            .monto-card .monto{color:#dc2626;}
+
+            .uva-no-disponible{
+                background:#fde68a;
+                color:#92400e !important;
+                padding:14px;
+                border-radius:14px;
+                font-size:0.95rem;
+                font-weight:bold;
+                line-height:1.4;
+            }
+            .uva-no-disponible strong{color: inherit;}
+
             .porcentajes-simple{
                 background:#2e2e2e;
                 color:#ffffff;
@@ -327,19 +364,10 @@
             @media(max-width:768px){
                 .inputs{grid-template-columns:1fr}
                 .cuotas-grid{grid-template-columns: 1fr;}
-                .logo{
-                    height:200px;
-                    margin-bottom:15px;
-                    text-align: right;
-                }
+                .logo{height:200px; /* margin-bottom:15px; text-align: right; */}
                 .uva-cards-grid{grid-template-columns: repeat(1, 1fr);}
-                .mensaje-consulta{
-                    font-size: 30px;
-                }
-                .porcentajes-años{
-                    display: block;
-                    padding: 4px 15px;
-                }
+                .mensaje-consulta{font-size: 30px;}
+                .porcentajes-años{display: block; /* padding: 4px 15px; */}
             }
         </style>
     </head>
@@ -378,23 +406,42 @@
                         </div>
                     </div>
 
-                    <div class="resultado">
-                        <p>Monto máximo:</p>
-                        <div id="montoMaximo">$0</div>
-                        <div id="textoPorcentaje"></div>
+                    <div class="resultado resultado-box">
+                        <div class="monto-card tradicional">
+                            <span class="titulo-monto">Monto máximo Tasa Tradicional</span>
+                            <div id="montoMaximoTradicional" class="monto">$0</div>
+                            <div id="textoPorcentajeTradicional" class="detalle"></div>
+                        </div>
+
+                        <div class="monto-card uva">
+                            <span class="titulo-monto">Monto máximo Línea UVA</span>
+                            <div id="montoMaximoUVA" class="monto">$0</div>
+                            <div id="textoPorcentajeUVA" class="detalle"></div>
+                        </div>
                     </div>
 
                     <div class="porcentajes-simple">
                         <div class="porcentajes-titulo">
-                            PORCENTAJE DE FINANCIACIÓN SEGÚN ANTIGUEDAD DEL VEHÍCULO:
+                            PORCENTAJE DE FINANCIACIÓN SEGÚN ANTIGÜEDAD DEL VEHÍCULO
                         </div>
-                        <div class="porcentajes-linea"> 
-                            <label class="porcentajes-años">2025-2026: 80% de su valor</label>
-                            <label class="porcentajes-años">2021-2024: 70% de su valor</label>
-                            <label class="porcentajes-años">2016-2020: 60% de su valor</label>
-                            <label class="porcentajes-años">2013-2015: 50% de su valor</label>
+
+                        <div class="porcentajes-linea">
+                            <strong>Préstamo Tradicional:</strong>
+                            <label class="porcentajes-años">2025-2026: 80%</label>
+                            <label class="porcentajes-años">2021-2024: 70%</label>
+                            <label class="porcentajes-años">2016-2020: 60%</label>
+                            <label class="porcentajes-años">2013-2015: 50%</label>
+                        </div>
+
+                        <hr style="opacity:.3">
+
+                        <div class="porcentajes-linea">
+                            <strong>Línea UVA:</strong>
+                            <label class="porcentajes-años">2023-2026: 60%</label>
+                            <label class="porcentajes-años">2021-2022: 50%</label>
                         </div>
                     </div>
+
 
                 </div>
             </header>
@@ -406,7 +453,7 @@
 
                 <h2 class="prestamo-tradicional" id="prestamoTradicional">Préstamo Tradicional</h2>
 
-                <!-- <div style="margin-bottom:20px">
+                <div style="margin-bottom:20px">
                     <label>Seleccione la Provincia</label><br>
                     <select id="provincia" style="width:260px">
                         <option value="cordoba">Córdoba</option>
@@ -415,7 +462,7 @@
                 </div>
                 <p style="font-size:.95rem;color:#64748b;margin-top:6px">
                     * Los gastos administrativos varían según la provincia
-                </p> -->
+                </p>
 
                 <div class="cards-grid">
                     <div class="card">
@@ -423,7 +470,7 @@
                         <p class="valor" id="mostrarMonto">$0</p>
                     </div>
                     <div class="card">
-                        <h3>Gastos de Otorgamiento</h3>
+                        <h3>Gastos MAUDAM</h3>
                         <p class="valor">$500.000</p>
                     </div>
                     <div class="card">
@@ -512,9 +559,30 @@
 
                 <div class="contactos-grid">
                     <div class="contacto-card">
-                        <h4>Diego Comba</h4>
-                        <a href="#" onclick="enviarWhatsApp('5493516161792')" target="_blank">
-                            📱 351-6161792
+                        <h4>Mauro Bono</h4>
+                        <a href="#" onclick="enviarWhatsApp('5493571311850')" target="_blank">
+                            📱 3571-311850
+                        </a>
+                    </div>
+
+                    <div class="contacto-card">
+                        <h4>Damian Fernandez</h4>
+                        <a href="#" onclick="enviarWhatsApp('5493571311861')" target="_blank">
+                            📱 3571-311861
+                        </a>
+                    </div>
+
+                    <div class="contacto-card">
+                        <h4>Violeta Muñoz</h4>
+                        <a href="#" onclick="enviarWhatsApp('5493571311924')" target="_blank">
+                            📱 3571-311924
+                        </a>
+                    </div>
+
+                    <div class="contacto-card">
+                        <h4>Cecilia Medina</h4>
+                        <a href="#" onclick="enviarWhatsApp('5493571311891')" target="_blank">
+                            📱 3571-311891
                         </a>
                     </div>
                 </div>
@@ -528,18 +596,18 @@
 
         <script>
             /* ====== CONSTANTES ====== */
-            const GASTOS_FIJOS = 700000;
+            const GASTOS_POR_PROVINCIA = {
+                cordoba: 500000,
+                santiago: 530000
+            };
             const COEF = {12:126.87, 24:82.21, 36:70.11, 48:64.95, 60:62.42};
-            const TEL = "5493516161792";
+            const TEL = "5493571311891";
             const COEF_UVA = {24: 65.35, 36: 52.10, 48: 45.88, 60: 42.43};
 
 
             /* ====== ELEMENTOS ====== */
             const valorVehiculo = document.getElementById("valorVehiculo");
             const anioVehiculo = document.getElementById("anioVehiculo");
-            const montoMaximo = document.getElementById("montoMaximo");
-            const textoPorcentaje = document.getElementById("textoPorcentaje");
-
             const montoFinanciar = document.getElementById("montoFinanciar");
             const mostrarMonto = document.getElementById("mostrarMonto");
             const mostrarNeto = document.getElementById("mostrarNeto");
@@ -550,31 +618,62 @@
             function calcularPrestamo(){
                 const valor = +valorVehiculo.value || 0;
                 const anio = +anioVehiculo.value;
-                let porc = 0, txt="";
 
-                if(anio>=2025){porc=80;txt="80% (0 a 1 año)";}
-                else if(anio>=2021){porc=70;txt="70% (2 a 5 años)";}
-                else if(anio>=2016){porc=60;txt="60% (6 a 10 años)";}
-                else if(anio>=2013){porc=50;txt="50% (11 a 13 años)";}
-                else{txt="No financiable";}            
+                /* ===== TRADICIONAL ===== */
+                let porc = 0, txtT="";
 
-                const max = Math.floor(valor*porc/100/1000)*1000;
-                montoMaximo.textContent = "$"+max.toLocaleString("es-AR");
-                textoPorcentaje.textContent = txt;
+                if(anio>=2025){porc=80;txtT="80% (0 a 1 año)";}
+                else if(anio>=2021){porc=70;txtT="70% (2 a 5 años)";}
+                else if(anio>=2016){porc=60;txtT="60% (6 a 10 años)";}
+                else if(anio>=2013){porc=50;txtT="50% (11 a 13 años)";}
+                else{txtT="No financiable";}            
+
+                const maxTrad = Math.floor(valor*porc/100/1000)*1000;
+                document.getElementById("montoMaximoTradicional").textContent = "$" + maxTrad.toLocaleString("es-AR");
+                document.getElementById("textoPorcentajeTradicional").textContent = txtT;
+
+                /* ===== UVA ===== */
+                let porcU = 0, txtU = "";
+
+                if(anio>=2023){porcU=60;txtU="60% (0 a 3 año)";}
+                else if(anio>=2021){porcU=50;txtU="50% (4 a 5 año)";}
+                else{txtU="No disponible para este año";}
+
+                const maxUVA = porcU ? Math.floor(valor*porcU/100/1000)*1000 : 0;
+                const montoUVAEl = document.getElementById("montoMaximoUVA");
+                const detalleUVAEl = document.getElementById("textoPorcentajeUVA");
+
+                if(maxUVA === 0){
+                    montoUVAEl.innerHTML = `
+                        No disponible para este año.<br>
+                        Contamos con <strong>3 alternativas adicionales en Línea UVA</strong>.<br>
+                        Consultá a nuestro WhatsApp para conocer las opciones disponibles.
+                    `;
+                    montoUVAEl.classList.add("uva-no-disponible");
+                    detalleUVAEl.textContent = "";
+                } else {
+                    montoUVAEl.textContent = "$" + maxUVA.toLocaleString("es-AR");
+                    montoUVAEl.classList.remove("uva-no-disponible");
+                    detalleUVAEl.textContent = txtU;
+                }
 
                 // setear automáticamente el input
-                montoFinanciar.value = max;
+                montoFinanciar.value = maxTrad;
                 calcularTodo();
                 actualizarUVA(anio);
             }
 
             function calcularTodo(){
                 const monto = +montoFinanciar.value || 0;
-                const gastos = GASTOS_FIJOS;
+                const provincia = document.getElementById("provincia").value;
+                const provinciaSelect = document.getElementById("provincia");
+                const provinciaValor = provinciaSelect.value;
+                const provinciaTexto = provinciaSelect.options[provinciaSelect.selectedIndex].text;
+                const gastos = GASTOS_POR_PROVINCIA[provincia];
                 const neto = monto - gastos;
                 const anio = +anioVehiculo.value;
                 
-                mostrarMonto.textContent = "$" + monto.toLocaleString("es-AR");
+                mostrarMonto.textContent = "$"+monto.toLocaleString("es-AR");
                 mostrarNeto.textContent = neto>0 ? "$"+neto.toLocaleString("es-AR") : "Monto insuficiente";
 
                 document.querySelector(".card:nth-child(2) .valor").textContent ="$" + gastos.toLocaleString("es-AR");
@@ -582,8 +681,9 @@
                 cuotasDiv.innerHTML="";
                 window.textoWA = 
                 `*Simulación Crédito Prendario*%0A%0A` +
+                `Provincia: ${provinciaTexto}%0A%0A` +
                 `Monto solicitado: $${monto.toLocaleString("es-AR")}%0A` +
-                `Gastos de Otorgamiento: $${gastos.toLocaleString("es-AR")}%0A` +
+                `Gastos MAUDAM: $${gastos.toLocaleString("es-AR")}%0A` +
                 `Neto a percibir (Agencia): $${neto.toLocaleString("es-AR")}%0A%0A` +
                 `*Cuotas tradicionales:*%0A`;
 
@@ -613,6 +713,7 @@
                 textoWA += `%0AQuiero más información sobre este crédito.`;
 
                 btnWhatsApp.addEventListener("click", () => enviarWhatsApp(TEL));
+                document.getElementById("provincia").addEventListener("change", calcularTodo);
 
                 calcularUVA();
             }
