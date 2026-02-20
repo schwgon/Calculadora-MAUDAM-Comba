@@ -442,7 +442,6 @@
                         </div>
                     </div>
 
-
                 </div>
             </header>
 
@@ -453,24 +452,13 @@
 
                 <h2 class="prestamo-tradicional" id="prestamoTradicional">Préstamo Tradicional</h2>
 
-                <div style="margin-bottom:20px">
-                    <label>Seleccione la Provincia</label><br>
-                    <select id="provincia" style="width:260px">
-                        <option value="cordoba">Córdoba</option>
-                        <option value="santiago">Santiago del Estero</option>
-                    </select>
-                </div>
-                <p style="font-size:.95rem;color:#64748b;margin-top:6px">
-                    * Los gastos administrativos varían según la provincia
-                </p>
-
                 <div class="cards-grid">
                     <div class="card">
                         <h3>Monto solicitado</h3>
                         <p class="valor" id="mostrarMonto">$0</p>
                     </div>
                     <div class="card">
-                        <h3>Gastos MAUDAM</h3>
+                        <h3>Gastos de Otorgamiento</h3>
                         <p class="valor">$500.000</p>
                     </div>
                     <div class="card">
@@ -559,30 +547,9 @@
 
                 <div class="contactos-grid">
                     <div class="contacto-card">
-                        <h4>Mauro Bono</h4>
-                        <a href="#" onclick="enviarWhatsApp('5493571311850')" target="_blank">
-                            📱 3571-311850
-                        </a>
-                    </div>
-
-                    <div class="contacto-card">
-                        <h4>Damian Fernandez</h4>
-                        <a href="#" onclick="enviarWhatsApp('5493571311861')" target="_blank">
-                            📱 3571-311861
-                        </a>
-                    </div>
-
-                    <div class="contacto-card">
-                        <h4>Violeta Muñoz</h4>
-                        <a href="#" onclick="enviarWhatsApp('5493571311924')" target="_blank">
-                            📱 3571-311924
-                        </a>
-                    </div>
-
-                    <div class="contacto-card">
-                        <h4>Cecilia Medina</h4>
-                        <a href="#" onclick="enviarWhatsApp('5493571311891')" target="_blank">
-                            📱 3571-311891
+                        <h4>Diego Comba</h4>
+                        <a href="#" onclick="enviarWhatsApp('5493516161792')" target="_blank">
+                            📱 351-6161792
                         </a>
                     </div>
                 </div>
@@ -596,12 +563,9 @@
 
         <script>
             /* ====== CONSTANTES ====== */
-            const GASTOS_POR_PROVINCIA = {
-                cordoba: 500000,
-                santiago: 530000
-            };
+            const GASTOS_FIJOS = 700000;
             const COEF = {12:126.87, 24:82.21, 36:70.11, 48:64.95, 60:62.42};
-            const TEL = "5493571311891";
+            const TEL = "5493516161792";
             const COEF_UVA = {24: 65.35, 36: 52.10, 48: 45.88, 60: 42.43};
 
 
@@ -665,15 +629,11 @@
 
             function calcularTodo(){
                 const monto = +montoFinanciar.value || 0;
-                const provincia = document.getElementById("provincia").value;
-                const provinciaSelect = document.getElementById("provincia");
-                const provinciaValor = provinciaSelect.value;
-                const provinciaTexto = provinciaSelect.options[provinciaSelect.selectedIndex].text;
-                const gastos = GASTOS_POR_PROVINCIA[provincia];
+                const gastos = GASTOS_FIJOS;
                 const neto = monto - gastos;
                 const anio = +anioVehiculo.value;
                 
-                mostrarMonto.textContent = "$"+monto.toLocaleString("es-AR");
+                mostrarMonto.textContent = "$" + monto.toLocaleString("es-AR");
                 mostrarNeto.textContent = neto>0 ? "$"+neto.toLocaleString("es-AR") : "Monto insuficiente";
 
                 document.querySelector(".card:nth-child(2) .valor").textContent ="$" + gastos.toLocaleString("es-AR");
@@ -681,9 +641,8 @@
                 cuotasDiv.innerHTML="";
                 window.textoWA = 
                 `*Simulación Crédito Prendario*%0A%0A` +
-                `Provincia: ${provinciaTexto}%0A%0A` +
                 `Monto solicitado: $${monto.toLocaleString("es-AR")}%0A` +
-                `Gastos MAUDAM: $${gastos.toLocaleString("es-AR")}%0A` +
+                `Gastos de Otorgamiento: $${gastos.toLocaleString("es-AR")}%0A` +
                 `Neto a percibir (Agencia): $${neto.toLocaleString("es-AR")}%0A%0A` +
                 `*Cuotas tradicionales:*%0A`;
 
@@ -713,7 +672,6 @@
                 textoWA += `%0AQuiero más información sobre este crédito.`;
 
                 btnWhatsApp.addEventListener("click", () => enviarWhatsApp(TEL));
-                document.getElementById("provincia").addEventListener("change", calcularTodo);
 
                 calcularUVA();
             }
